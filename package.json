@@ -1,0 +1,14 @@
+{
+  "name": "devtinder-backend",
+  "version": "1.0.0",
+  "description": "Building backend for devTinder",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "author": "prakhar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

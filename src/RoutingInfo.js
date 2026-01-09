@@ -9,6 +9,8 @@ const express = require('express');
 
 const app = express();
 
+// if there is empty response handler with no res.send() the req will be pending (loop) and then timeout
+
 //app.use('/',(req,res)=>{        //this route will override the other routes
 //res. send("Hello from /");
 //}) 
@@ -91,3 +93,14 @@ app.listen(port,()=>{
 
 
 // app.use() // this will match for all the HTTP requests 
+
+
+
+// Can have multiple reposne handlers
+app.use("/user",(req,res,next)=>{
+    res.send("Hello from user");
+    next();
+},
+(req,res)=>{
+    res.send("This will be executed after the next() is called is there is no res send from the previous handler");
+});

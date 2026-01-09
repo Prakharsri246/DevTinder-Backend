@@ -4,22 +4,40 @@
 
 const express = require('express');
 
+
 //creating a new express application
 
 const app = express();
 
+//app.use('/',(req,res)=>{        //this route will override the other routes
+//res. send("Hello from /");
+//}) 
 //creating a request handler
-app.use('/test',(req,res)=>{
-    res.send("Hello from test !");
+// app.use('/test',(req,res)=>{
+//     res.send("Hello from test !");
+// })
+
+// app.use('/hello',(req,res)=>{
+//  res.send("Hello from hello")
+// })
+
+// app.use('/',(req,res)=>{        
+// res. send("Hello from /");
+// })
+
+//Get Request
+app.get('/user',(req,res)=>{
+    res.send({userName:"Prakhar", age:28});
 })
 
-app.use('/hello',(req,res)=>{
- res.send("Hello from hello")
+//Post Request
+app.post('/user',(req,res)=>{
+    res.send("Saved to Database");
+})
+app.delete('/user',(req,res)=>{
+    res.send("Deleted from Database");
 })
 
-app.use('/',(req,res)=>{
-res. send("Hello from /");
-}) 
 //specify the port on which the server will listen
 const port = 3000;
 
@@ -27,3 +45,10 @@ const port = 3000;
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
 });
+
+
+// The sequence of the routes is very important.
+// It follows the top down approach for matching the routes
+
+
+// app.use() // this will match for all the HTTP requests 

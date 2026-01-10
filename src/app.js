@@ -10,17 +10,22 @@ const app = express();
 // Creating A SignUp API 
 app.post('/signup',async (req,res)=>{
   const user = new User({
-    firstName:"Prakhar",
-    lastName:"Srivastava",
-    email:"prakhar@gmail.com",
+    firstName:"Virat",
+    lastName:"Kohli",
+    email:"virat@gmail.com",
     password:"123456",
     age:20,
     gender:"Male"
   })
-  //Saving the user in the database
-  await user.save();
-  res.send("User Registered Successfully");
+  //Saving the user in the database and performing error handling 
 
+
+try {
+    await user.save();
+    res.send("User Registered Successfully");
+}catch(err){
+    console.log("User Registration Failed",err.message);
+}
 })
 
 

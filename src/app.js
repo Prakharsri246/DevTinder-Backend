@@ -5,21 +5,16 @@ const ConnectDB = require("./config/database");
 const User = require("./models/user");
 const app = express();
 
-
+// this allow the data to be read in json format
+// Reads the json data and converts it into a javascript object.
+app.use(express.json());
 
 // Creating A SignUp API 
 app.post('/signup',async (req,res)=>{
-  const user = new User({
-    firstName:"Virat",
-    lastName:"Kohli",
-    email:"virat@gmail.com",
-    password:"123456",
-    age:20,
-    gender:"Male"
-  })
+    // Creating a new instance for the User Model
+  const user = new User(req.body)
+
   //Saving the user in the database and performing error handling 
-
-
 try {
     await user.save();
     res.send("User Registered Successfully");
@@ -28,7 +23,56 @@ try {
 }
 })
 
+//Fetching 1 user
+app.get('/user', async(req, res)=>{
+  const userEmail = req.body.email;
+    try {
+         const user = await User.find({email:userEmail});
+         if(user.length === 0)
+         {
+            res.status(404).send("User Not Found");
+        }
+        else {
+         res.send(user);
+        }
+          
+    } catch (err) {
+        console.log("User Fetching Failed",err.message);
+    }
+})
 
+// Creating a Feed API
+app.get("/feed", async(req,res)=>{
+    try {
+      const user = await User.find({});  // Passing({}) empty obj will fetch all user info
+      res.send(user);
+    } catch (error) {
+       console.log("User Fetching Failed",err.message);
+    }
+})
+
+//Deleting a user 
+app.delete("/user", async(req, res)=>{
+ const userId = req.body.userId;
+    try {
+      const user = await User.findByIdAndDelete(userId);
+      res.send("User Deleted Successfully");
+    }
+catch (error){
+  console.log("User Deletion Failed",error.message);
+}})
+
+//Updating a user
+app.patch('/user', async(req,res)=>{
+const data = req.body;   // Data to be updated
+const userId = req.body.userId; // User id to be updated
+try {
+    const user = await User.findByIdAndUpdate(userId,data);
+    res.send("User Updated Successfully");
+}catch(error){
+    console.log("User Update Failed",error.message);
+}
+})
 
 ConnectDB().then(()=>{
     console.log("Database Connected Successfully"); //First we connect to the database then we start the server

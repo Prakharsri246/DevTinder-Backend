@@ -1,54 +1,37 @@
-//console.log("Starting the server");
-
-//Creating the server using express js -> helps you create server, open source framework
-
-const express = require('express');
-
-
-//creating a new express application
-
+const express = require("express");
+// First we connect to the database then we start the server
+const ConnectDB = require("./config/database");
+//getiing schema from user.js
+const User = require("./models/user");
 const app = express();
 
-//app.use('/',(req,res)=>{        //this route will override the other routes
-//res. send("Hello from /");
-//}) 
-//creating a request handler
-// app.use('/test',(req,res)=>{
-//     res.send("Hello from test !");
-// })
 
-// app.use('/hello',(req,res)=>{
-//  res.send("Hello from hello")
-// })
 
-// app.use('/',(req,res)=>{        
-// res. send("Hello from /");
-// })
+// Creating A SignUp API 
+app.post('/signup',async (req,res)=>{
+  const user = new User({
+    firstName:"Prakhar",
+    lastName:"Srivastava",
+    email:"prakhar@gmail.com",
+    password:"123456",
+    age:20,
+    gender:"Male"
+  })
+  //Saving the user in the database
+  await user.save();
+  res.send("User Registered Successfully");
 
-//Get Request
-app.get('/user',(req,res)=>{
-    res.send({userName:"Prakhar", age:28});
 })
 
-//Post Request
-app.post('/user',(req,res)=>{
-    res.send("Saved to Database");
+
+
+ConnectDB().then(()=>{
+    console.log("Database Connected Successfully"); //First we connect to the database then we start the server
+    app.listen(3000,()=>{
+    console.log("Server is running on port 3000");  // Server has started listining to the requests
 })
-app.delete('/user',(req,res)=>{
-    res.send("Deleted from Database");
+}).catch(err=>{
+    console.log("Database Connection Failed",err);
 })
 
-//specify the port on which the server will listen
-const port = 3000;
 
-// listen to the port
-app.listen(port,()=>{
-    console.log(`Server is running on port ${port}`);
-});
-
-
-// The sequence of the routes is very important.
-// It follows the top down approach for matching the routes
-
-
-// app.use() // this will match for all the HTTP requests 

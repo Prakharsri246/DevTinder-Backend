@@ -63,10 +63,21 @@ catch (error){
 }})
 
 //Updating a user
-app.patch('/user', async(req,res)=>{
+app.patch('/user/:userId', async(req,res)=>{
 const data = req.body;   // Data to be updated
-const userId = req.body.userId; // User id to be updated
+const userId = req.params.userId; // User id to be updated
 try {
+    //VALIDATIONS FOR ALLOWED FIELDS
+    const ALLOWED_FIELDS=["age", "photourl","about","gender","skills"]; //allowed fields to be updated
+    const isAllowedFields = Object.keys(data).every(key => ALLOWED_FIELDS.includes(key));
+    if(!isAllowedFields)
+    {
+        throw new Error("Invalid Update");
+    }
+    if(data?.skills.length>10)
+    {
+        throw new Error("Skills limit exceeded");
+    }
     const user = await User.findByIdAndUpdate(userId,data, {runValidators:true});  // you need to run validators to validate the data
     res.send("User Updated Successfully");
 }catch(error){

@@ -13,13 +13,13 @@ app.use(express.json());
 app.post('/signup',async (req,res)=>{
     // Creating a new instance for the User Model
   const user = new User(req.body)
-
   //Saving the user in the database and performing error handling 
 try {
     await user.save();
     res.send("User Registered Successfully");
-}catch(err){
-    console.log("User Registration Failed",err.message);
+} catch (error) {
+    res.status(400).send(error.message);
+    console.log("User Registration Failed"+ error.message);
 }
 })
 
@@ -37,6 +37,7 @@ app.get('/user', async(req, res)=>{
         }
           
     } catch (err) {
+        res.status(400).send("User Fetching Failed"+ err.message);
         console.log("User Fetching Failed",err.message);
     }
 })
@@ -47,7 +48,8 @@ app.get("/feed", async(req,res)=>{
       const user = await User.find({});  // Passing({}) empty obj will fetch all user info
       res.send(user);
     } catch (error) {
-       console.log("User Fetching Failed",err.message);
+       res.status(400).send("User Fetching Failed"+ error.message);
+       console.log("User Fetching Failed",error.message);
     }
 })
 
@@ -68,7 +70,7 @@ const data = req.body;   // Data to be updated
 const userId = req.params.userId; // User id to be updated
 try {
     //VALIDATIONS FOR ALLOWED FIELDS
-    const ALLOWED_FIELDS=["age", "photourl","about","gender","skills"]; //allowed fields to be updated
+    const ALLOWED_FIELDS=["age", "photoUrl","about","gender","skills"]; //allowed fields to be updated
     const isAllowedFields = Object.keys(data).every(key => ALLOWED_FIELDS.includes(key));
     if(!isAllowedFields)
     {
@@ -82,6 +84,7 @@ try {
     res.send("User Updated Successfully");
 }catch(error){
     res.status(404).send("User Update Failed"+ error.message);
+    console.log("User Update Failed",error.message);
 }
 })
 

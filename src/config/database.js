@@ -6,6 +6,7 @@ const ConnectDB = async () => {
 }
 
 
+
 //EXPORTING THIS connectdb to the app.js
 module.exports = ConnectDB;
 

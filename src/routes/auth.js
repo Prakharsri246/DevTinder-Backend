@@ -2,7 +2,7 @@ const express = require('express');
 //getiing schema from user.js
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { validateSignUpData } = require("../utils/validateSignUp");
+const { validateSignUpData } = require("../utils/validations");
 // Creating the Auth Router
 const authRouter = express.Router();
 
@@ -64,6 +64,14 @@ authRouter.post('/login', async (req, res) => {
         res.status(400).send("Error:" + error.message);
     }
 
+
+})
+
+//Log Out API
+authRouter.post('/logout', async (req, res) => {
+    // we set the token to null
+    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.status(200).send("Logout Successfully")
 
 })
 

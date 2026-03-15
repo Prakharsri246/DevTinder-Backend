@@ -2,14 +2,21 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 // First we connect to the database then we start the server
 const ConnectDB = require("./config/database");
+const cors = require('cors');
+//created the express application
 const app = express();
-
+app.use(cors({
+    origin: "http://localhost:5173",  // white listing of the label
+    credentials: true,
+}));
 // this allow the data to be read in json format
 // Reads the json data and converts it into a javascript object.
 app.use(express.json());
 
 // Added cookie parser to read the cookie
 app.use(cookieParser());
+
+
 
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');

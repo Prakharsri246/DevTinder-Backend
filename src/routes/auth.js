@@ -54,7 +54,7 @@ authRouter.post('/login', async (req, res) => {
             const token = await isEmail.getJWT()
             //Add the token to cookie 
             res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000) });
-            res.send("User Logged in Successfully")
+            res.status(200).send(isEmail)
         } else {
             throw new Error("Invalid credentials")
         }
@@ -71,8 +71,7 @@ authRouter.post('/login', async (req, res) => {
 authRouter.post('/logout', async (req, res) => {
     // we set the token to null
     res.cookie("token", null, { expires: new Date(Date.now()) });
-    res.status(200).send("Logout Successfully")
-
+    res.status(200).send("Logout Successfully");
 })
 
 module.exports = authRouter;

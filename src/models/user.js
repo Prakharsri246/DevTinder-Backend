@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true,
+        required: true, // mongodb creates a index for that which will inhance the search 
+        index: true, // 
         minLength: 3,
         maxLength: 50,
     },
@@ -13,9 +14,10 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     email: {
+
         type: String,
         required: true,
-        unique: true,
+        unique: true,      // mongodb creates a index for that which will inhance the search 
         trim: true,
         lowercase: true,
         validate(value) {
@@ -39,10 +41,9 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        validate(value) {               // this only works when creating a new user
-            if (!["male", "female", "others"].includes(value)) {
-                throw new Error("Invalid Gender");
-            }
+        enum: {
+            values: ["male", "female", "other"],
+            message: `{VALUE} is not correct gender type`
         }
     },
     photoUrl: {

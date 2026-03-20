@@ -14,7 +14,7 @@ userRouter.get('/user/request/received', userAuth, async (req, res) => {
             toUserId: loggedInUser._id,
             status: "interested"
         }).populate("fromUserId", USER_SAFE_DATA); // returns an array of connect req
-        res.json({
+        res.status(200).json({
             message: "List of connection request",
             data: connectionRequest
         })
@@ -33,13 +33,13 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
 
         }).populate("fromUserId", USER_SAFE_DATA).populate("toUserId", USER_SAFE_DATA)
         const data = connectionRequest.map((row) => {
-            if (row.fromUserId._id === loggedInUser._id) {
+            if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
                 return row.toUserId;
             }
             return row.fromUserId;
         })
 
-        res.json({
+        res.status(200).json({
             message: "Connections information",
             data: data
         })

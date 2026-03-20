@@ -4,6 +4,7 @@
   "description": "Building backend for devTinder",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
   "author": "prakhar",
